@@ -43,12 +43,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	//})
 }
 
-func Home(w http.ResponseWriter, r *http.Request) {
+func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte(fmt.Sprintf("Hello, %s", "antonio")))
 }
 
-func Refresh(w http.ResponseWriter, r *http.Request) {
+// not important
+func ForgotPassword(w http.ResponseWriter, R *http.Request) {
+
+}
+
+// not important
+func DeleteAccount(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func RefreshToken(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		if err == http.ErrNoCookie {
