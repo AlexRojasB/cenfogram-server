@@ -16,9 +16,8 @@ func TestCreate(t *testing.T) {
 	userId = old.Hex()
 	user := m.User{
 		ID:        old,
-		Name:      "Alexander",
-		Email:     "alexrrojas.b@gmail.com",
-		CreatedAt: time.Now(),
+		Nick:      "xzaokyx",
+		Password:  "admin123.",
 		UpdatedAt: time.Now(),
 	}
 	err := userService.Create(user)
@@ -46,8 +45,8 @@ func TestRead(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	user := m.User{
-		Name:  "Alexander Rojas Benavides",
-		Email: "proxtos@gmail.com",
+		Nick:     "xzaokyx",
+		Password: "admin123.3",
 	}
 
 	err := userService.Update(user, userId)

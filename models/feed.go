@@ -6,11 +6,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type User struct {
+type Feed struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	Nick      string             `json:"nick"`
-	Password  string             `json:"email"`
+	Picture   string             `json:"picture"`
+	Likes     int32              `json:"likes"`
+	Comments  Comments           `json:"comments"`
+	Owner     Owner              `json:"owner"`
 	UpdatedAt time.Time          `bson:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
-type Users []*User
+type Feeds []*Feed
