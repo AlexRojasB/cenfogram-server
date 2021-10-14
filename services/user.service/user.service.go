@@ -15,13 +15,12 @@ func Create(user m.User) error {
 	return nil
 }
 
-func Read() (m.Users, error) {
-	users, err := userRepository.Read()
+func Read(loginUser m.User) (m.User, error) {
+	user, err := userRepository.Read(loginUser)
 	if err != nil {
-		return nil, err
+		return user, err
 	}
-
-	return users, nil
+	return user, nil
 }
 
 func Update(user m.User, userId string) error {

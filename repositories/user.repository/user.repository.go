@@ -2,6 +2,7 @@ package user_repository
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/AlexRojasB/go-mongoAtlas-connection.git/database"
@@ -16,6 +17,27 @@ var ctx = context.Background()
 func Create(user m.User) error {
 
 	var err error
+	var users m.Users
+
+	filter := bson.M{"email": user.Email}
+
+	cur, er := collection.Find(ctx, filter)
+	if er != nil {
+		return er
+	}
+
+	for cur.Next(ctx) {
+		var dbUser m.User
+		err = cur.Decode(&dbUser)
+		if err != nil {
+			return err
+		}
+		users = append(users, &user)
+	}
+
+	if users != nil && len(users) > 0 {
+		return errors.New("The user already exists")
+	}
 
 	_, err = collection.InsertOne(ctx, user)
 
@@ -25,24 +47,16 @@ func Create(user m.User) error {
 	return nil
 }
 
-func Read() (m.Users, error) {
-	var users m.Users
-	filter := bson.D{}
+func Read(loginUser m.User) (m.User, error) {
+	var user m.User
+	filter := bson.M{"email": loginUser.Email, "password": loginUser.Password}
 
-	cur, err := collection.Find(ctx, filter)
+	cur := collection.FindOne(ctx, filter)
+	err := cur.Decode(&user)
 	if err != nil {
-		return nil, err
+		return user, err
 	}
-
-	for cur.Next(ctx) {
-		var user m.User
-		err = cur.Decode(&user)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, &user)
-	}
-	return users, nil
+	return user, nil
 }
 
 func Update(user m.User, userId string) error {

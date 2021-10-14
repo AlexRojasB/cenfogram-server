@@ -2,50 +2,66 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
 	middleware "github.com/AlexRojasB/go-mongoAtlas-connection.git/middleware"
 	m "github.com/AlexRojasB/go-mongoAtlas-connection.git/models"
+	userService "github.com/AlexRojasB/go-mongoAtlas-connection.git/services/user.service"
 	"github.com/dgrijalva/jwt-go"
 )
 
-var users = map[string]string{
-	"user1": "password1",
-	"user2": "password2",
-}
-
 func Login(w http.ResponseWriter, r *http.Request) {
-	var credentials m.Credentials
+	var credentials m.User
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	expectedPass, ok := users[credentials.Username]
-	if !ok || expectedPass != credentials.Password {
-		w.WriteHeader(http.StatusUnauthorized)
+	//expectedPass, ok := users[credentials.Username]
+	//if !ok || expectedPass != credentials.Password {
+	//	w.WriteHeader(http.StatusUnauthorized)
+	//	return
+	//}
+
+	loggedUser, err := userService.Read(credentials)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	tokenString, err := middleware.GenerateJWT(credentials.Username)
+	tokenString, err := middleware.GenerateJWT(credentials.Email)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Token", tokenString)
-	//http.SetCookie(w, &http.Cookie{
-	//Name:    "token",
-	//Value:   tokenString,
-	//Expires: expirationTime,
-	//})
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(loggedUser)
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
+	var user m.User
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	w.Write([]byte(fmt.Sprintf("Hello, %s", "antonio")))
+	err = userService.Create(user)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	tokenString, err := middleware.GenerateJWT(user.Email)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Token", tokenString)
+	w.WriteHeader(http.StatusCreated)
 }
 
 // not important

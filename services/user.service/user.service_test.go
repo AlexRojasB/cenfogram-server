@@ -17,13 +17,14 @@ func TestCreate(t *testing.T) {
 	user := m.User{
 		ID:        old,
 		Nick:      "xzaokyx",
+		Email:     "proxtos@gmail.com",
 		Password:  "admin123.",
 		UpdatedAt: time.Now(),
 	}
 	err := userService.Create(user)
 
 	if err != nil {
-		t.Error("Error en la prueba de persistencia de datos")
+		t.Error(err.Error())
 		t.Fail()
 	} else {
 		t.Log("La prueba finalizo con exito")
@@ -31,16 +32,21 @@ func TestCreate(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-	users, err := userService.Read()
-	if err != nil {
-		t.Error("Se ha presentado un error")
-		t.Fail()
+	loginUser := m.User{
+		Email:    "proxtos@gmail.com",
+		Password: "admin13.",
 	}
-	if len(users) == 0 {
+
+	user, err := userService.Read(loginUser)
+	if err != nil {
+		t.Error(err.Error())
+		t.Fail()
+	} else if user.Email == "" {
 		t.Error("No hay datos")
 		t.Fail()
+	} else {
+		t.Log("La prueba finalizo correctamente")
 	}
-	t.Log("La prueba finalizo correctamente")
 }
 
 func TestUpdate(t *testing.T) {
