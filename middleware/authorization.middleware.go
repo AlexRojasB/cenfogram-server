@@ -11,10 +11,10 @@ import (
 
 var mySigningKey = []byte("secret_key")
 
-func GenerateJWT(userName string) (string, error) {
+func GenerateJWT(email string) (string, error) {
 	expirationTime := time.Now().Add(time.Minute * 5)
 	claims := &m.Claims{
-		Username:   userName,
+		Username:   email,
 		Authorized: true,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
