@@ -14,37 +14,24 @@ import (
 var collection = database.GetCollection("users")
 var ctx = context.Background()
 
-func Create(user m.User) error {
-
+func Create(user m.User) (interface{}, error) {
+	var dbUser m.User
 	var err error
-	var users m.Users
 
 	filter := bson.M{"email": user.Email}
 
-	cur, er := collection.Find(ctx, filter)
-	if er != nil {
-		return er
+	cur := collection.FindOne(ctx, filter)
+	errFind := cur.Decode(&dbUser)
+	if errFind == nil {
+		return nil, errors.New("The user already exists")
 	}
 
-	for cur.Next(ctx) {
-		var dbUser m.User
-		err = cur.Decode(&dbUser)
-		if err != nil {
-			return err
-		}
-		users = append(users, &user)
-	}
-
-	if users != nil && len(users) > 0 {
-		return errors.New("The user already exists")
-	}
-
-	_, err = collection.InsertOne(ctx, user)
+	insertedUser, err := collection.InsertOne(ctx, user)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return insertedUser.InsertedID, nil
 }
 
 func Read(loginUser m.User) (m.User, error) {

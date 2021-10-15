@@ -6,13 +6,12 @@ import (
 	userRepository "github.com/AlexRojasB/go-mongoAtlas-connection.git/repositories/user.repository"
 )
 
-func Create(user m.User) error {
-	err := userRepository.Create(user)
+func Create(user m.User) (interface{}, error) {
+	id, err := userRepository.Create(user)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	return nil
+	return id, nil
 }
 
 func Read(loginUser m.User) (m.User, error) {

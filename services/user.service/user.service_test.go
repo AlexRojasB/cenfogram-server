@@ -17,17 +17,17 @@ func TestCreate(t *testing.T) {
 	user := m.User{
 		ID:        old,
 		Nick:      "xzaokyx",
-		Email:     "proxtos@gmail.com",
+		Email:     "proxts@gmail.com",
 		Password:  "admin123.",
 		UpdatedAt: time.Now(),
 	}
-	err := userService.Create(user)
+	id, err := userService.Create(user)
 
 	if err != nil {
 		t.Error(err.Error())
 		t.Fail()
 	} else {
-		t.Log("La prueba finalizo con exito")
+		t.Logf("La prueba finalizo con exito new ID: %s", id)
 	}
 }
 
