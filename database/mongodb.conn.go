@@ -11,7 +11,7 @@ import (
 
 var (
 	usr      = "seke"
-	pwd      = "epsi1234"
+	pwd      = "patopurific2"
 	host     = "localhost"
 	port     = 27017
 	database = "tutorial"
@@ -31,7 +31,7 @@ func GetCollection(collection string) *mongo.Collection {
 	//if err != nil {
 	//	panic(err.Error())
 	//}
-	clientOptions := options.Client().ApplyURI("mongodb+srv://seke:upsi1234@cluster0.zrmzp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://seke:patopurific2@cluster0.zrmzp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, clientOptions)

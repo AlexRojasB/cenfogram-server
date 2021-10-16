@@ -53,8 +53,7 @@ func Update(user m.User, userId string) error {
 
 	filter := bson.M{"_id": old}
 	update := bson.M{"$set": bson.M{
-		"nick":       user.Nick,
-		"password":   user.Password,
+		"profile":    user.Profile,
 		"updated_at": time.Now(),
 	},
 	}
