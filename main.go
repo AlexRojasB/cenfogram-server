@@ -7,6 +7,7 @@ import (
 	"os"
 
 	h "github.com/AlexRojasB/go-mongoAtlas-connection.git/handlers"
+	"github.com/AlexRojasB/go-mongoAtlas-connection.git/middleware"
 )
 
 func home(w http.ResponseWriter, R *http.Request) {
@@ -17,6 +18,8 @@ func handleRequests() {
 	http.HandleFunc("/login", h.Login)
 	http.HandleFunc("/refresh", h.RefreshToken)
 	http.HandleFunc("/signup", h.SignUp)
+	http.Handle("/feed", middleware.IsAuthorized(h.GetAllNewFeed))
+	http.Handle("/ownfeed", middleware.IsAuthorized(h.GetAllMyFeeds))
 	//http.Handle("/home", middleware.IsAuthorized(h.SignUp))
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -2,7 +2,6 @@ package user_service_test
 
 import (
 	"testing"
-	"time"
 
 	m "github.com/AlexRojasB/go-mongoAtlas-connection.git/models"
 	userService "github.com/AlexRojasB/go-mongoAtlas-connection.git/services/user.service"
@@ -15,11 +14,10 @@ func TestCreate(t *testing.T) {
 	var old primitive.ObjectID
 	userId = old.Hex()
 	user := m.User{
-		ID:        old,
-		Nick:      "xzaokyx",
-		Email:     "proxts@gmail.com",
-		Password:  "admin123.",
-		UpdatedAt: time.Now(),
+		ID:       old,
+		Nick:     "xzaokyx",
+		Email:    "proxts@gmail.com",
+		Password: "admin123.",
 	}
 	id, err := userService.Create(user)
 

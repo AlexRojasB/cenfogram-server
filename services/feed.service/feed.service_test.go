@@ -2,7 +2,6 @@ package feed_service_test
 
 import (
 	"testing"
-	"time"
 
 	m "github.com/AlexRojasB/go-mongoAtlas-connection.git/models"
 	feedService "github.com/AlexRojasB/go-mongoAtlas-connection.git/services/feed.service"
@@ -25,7 +24,6 @@ func TestCreateFeed(t *testing.T) {
 			Location: "Santa Fe, Quesada",
 			Picture:  "https://cdn.pixabay.com/photo/2017/02/08/16/45/man-2049447_960_720.jpg",
 		},
-		UpdatedAt: time.Now(),
 	}
 	id, err := feedService.Create(feed)
 
@@ -84,10 +82,9 @@ func TestUpdateCommentsOrLike(t *testing.T) {
 	comments = append(comments, &comment)
 
 	feed := m.Feed{
-		ID:        old,
-		Likes:     56,
-		Comments:  comments,
-		UpdatedAt: time.Now(),
+		ID:       old,
+		Likes:    56,
+		Comments: comments,
 	}
 
 	err := feedService.Update(feed)

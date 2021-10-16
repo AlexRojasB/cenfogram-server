@@ -12,7 +12,7 @@ import (
 var mySigningKey = []byte("secret_key")
 
 func GenerateJWT(email string) (string, error) {
-	expirationTime := time.Now().Add(time.Minute * 5)
+	expirationTime := time.Now().Add(time.Hour * 5)
 	claims := &m.Claims{
 		Username:   email,
 		Authorized: true,
