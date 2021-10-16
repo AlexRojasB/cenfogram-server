@@ -13,6 +13,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var credentials m.User
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 	if err != nil {
+		json.NewEncoder(w).Encode(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
