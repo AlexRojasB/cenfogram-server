@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	h "github.com/AlexRojasB/go-mongoAtlas-connection.git/handlers"
 )
@@ -17,7 +18,11 @@ func handleRequests() {
 	http.HandleFunc("/refresh", h.RefreshToken)
 	http.HandleFunc("/signup", h.SignUp)
 	//http.Handle("/home", middleware.IsAuthorized(h.SignUp))
-	log.Fatal(http.ListenAndServe(":9001", nil))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9001"
+	}
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func main() {
